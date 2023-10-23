@@ -1,0 +1,2 @@
+# WebAppLocalVersion
+# BookingUsingOfflineComp
