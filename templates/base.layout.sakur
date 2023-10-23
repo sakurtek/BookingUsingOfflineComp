@@ -1,0 +1,213 @@
+{{define "base"}}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Booking And Reservation</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/datepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/notie.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css" />
+  </head>
+    <body>
+
+    <!--- MENU TOP BAR  -->
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/about">About</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Rooms
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="/generals-quarters">General's Quarters</a></li>
+                  <li><a class="dropdown-item" href="/majors-suite">Major's Suite</a></li>
+                </ul>
+              </li>
+              
+              <li class="nav-item">
+                <a class="nav-link" href="/make-reservation">Book Now</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="/contact">Contact</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+   
+    <!-- blok untuk header -->
+    {{block "header" . }}
+    {{end}}
+    
+    <!-- blok untuk content personal -->
+    {{block "content" .}}
+    {{end}}
+
+    <div class="container-fluid">
+        <div class="row my-footer">
+            <div class="col">
+                left colom
+            </div>
+    
+            <div class="col">
+                middle colom
+            </div>
+    
+            <div class="col">
+                right colom
+            </div>
+        </div>
+    </div>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/datepicker-full.min.js"></script>
+    <script src="/static/js/notie.min.js"></script>
+    <script src="/static/js/sweetalert2@11.js"></script>
+
+    {{block "js" .}}
+
+    {{end}}
+
+    <script>
+      // panggil fungsi promp disini
+      let messageDialog = MessageDialog();
+
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      // ini contoh untuk validasi data
+      (() => {
+      'use strict'
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+          Array.from(forms).forEach(form => {
+          form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+
+          form.classList.add('was-validated')
+        }, false)
+      })
+      })()
+
+      function MessageDialog () {
+        // TOAST MENGGUNAKAN SWEETALERT
+        let MessageToast = function(c) {
+          const {
+            title = "",
+            icon = "",
+            position = "top-end",
+          } = c;
+
+          const Toast = Swal.mixin({
+              toast: true,
+              title: title,
+              icon: icon,
+              position: position,
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+              }
+            })
+
+            Toast.fire({}) 
+        }
+
+        // menggunakan MODAL dari SWEETALERT
+        let MessageBox = function(c) {
+          const {
+            title= "",
+            text = "",
+            icon = "",
+          } = c;
+
+            Swal.fire({
+              title: title,
+              icon: icon,
+              html: text,
+              confirmButtonText: "Ok"
+            })   
+        }
+
+        return {
+          MessageToast: MessageToast,
+          MessageBox: MessageBox,
+        }
+      }
+
+      function notify(msg, msgType) {
+        notie.alert(
+          {
+            type: msgType,
+            text: msg,
+            overlay: "notie-overlay",
+          }
+        )
+      }
+
+      {{with .Error}}
+          //notify("{{.}}", "error")
+          messageDialog.MessageToast({
+              title: "{{.}}",
+              icon: "error",
+            })
+      {{end}}
+
+      {{with .Flash}}
+           messageDialog.MessageToast({
+              title: "{{.}}",
+              icon: "success",
+            })
+      {{end}}
+
+      {{with .Warning}}
+          messageDialog.MessageToast({
+              title: "{{.}}",
+              icon: "warning",
+            })
+      {{end}}
+    
+  /*
+      {{$dxinfo := index .Data "dataCheck"}}
+
+      {{if eq $dxinfo.StatusExist true}}
+        {{if eq $dxinfo.StatusProses true}}
+            messageDialog.MessageToast({
+              title: "Data Barhasil Disimpan",
+              icon: "success",
+            })
+        {{else}}
+             messageDialog.MessageToast({
+              title: "Data GAGAL Tersimpan",
+              icon: "warning",
+            })
+        {{end}}
+      {{end}}
+      */
+
+      </script>
+    </body>
+</html>
+
+{{end}}
